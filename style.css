@@ -5,7 +5,7 @@
 /* === 001-root.scss === */
 /* Root styles */
 :root {
-  --goodfin: 1; /* sentinel — scripts check for this before running */
+  --goodfin: 1; /* sentinel — lets scripts check that the theme is loaded */
   --primary-r: 229;
   --primary-g: 56;
   --primary-b: 59;
