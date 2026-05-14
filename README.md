@@ -4,16 +4,43 @@ A Jellyfin theme based on [NeutralFin](https://github.com/KartoffelChipss/Neutra
 
 ## Usage
 
-Add one of the following to your Jellyfin custom CSS:
+Add the following to your Jellyfin custom CSS:
 
 ```css
 @import url('https://cdn.jsdelivr.net/gh/PalmarHealer/goodfin@main/style.min.css');
 ```
 
-or the unminified version:
+<details>
+<summary>Use the unminified version</summary>
 
 ```css
 @import url('https://cdn.jsdelivr.net/gh/PalmarHealer/goodfin@main/style.css');
+```
+
+</details>
+
+## Customizer
+
+Optional snippets you can append to your Jellyfin custom CSS depending on which plugins you use:
+
+### Media Bar plugin without trailers
+
+If you use the Media Bar plugin but have trailers disabled, the volume button becomes useless. Hide it:
+
+```css
+.volume-toggle {
+  display: none;
+}
+```
+
+### IntroSkipper plugin
+
+When the IntroSkipper plugin is active, you can tune how long the skip button stays visible:
+
+```css
+:root {
+    --skip-hide-duration: 8s;
+}
 ```
 
 ## Scripts
@@ -88,30 +115,6 @@ cat src/*.scss > _bundle.scss
 sass --style=expanded _bundle.scss style.css
 sass --style=compressed _bundle.scss style.min.css
 # JS bundle: replicate the loop in .github/workflows/build.yml
-```
-
-## Customizer
-
-Optional snippets you can append to your Jellyfin custom CSS depending on which plugins you use:
-
-### Media Bar plugin without trailers
-
-If you use the Media Bar plugin but have trailers disabled, the volume button becomes useless. Hide it:
-
-```css
-.volume-toggle {
-  display: none;
-}
-```
-
-### IntroSkipper plugin
-
-When the IntroSkipper plugin is active, you can tune how long the skip button stays visible:
-
-```css
-:root {
-    --skip-hide-duration: 8s;
-}
 ```
 
 ## Credit & License
