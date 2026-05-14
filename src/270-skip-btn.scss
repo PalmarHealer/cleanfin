@@ -1,0 +1,13 @@
+/* Format skip btn */
+.skip-button-container {
+    bottom: 10%;
+  .skip-button {
+    border-radius: var(--rounded-cards) !important;
+    padding: .4em .6em;
+    margin-right: 1.5em;
+  }
+  .skip-button:active {
+    filter: brightness(1.2) !important;
+    transform: scale(.98);
+  }
+}

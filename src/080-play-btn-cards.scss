@@ -1,0 +1,24 @@
+/* Format play btn on cards*/
+.cardOverlayContainer > .cardOverlayFab-primary,
+.layout-mobile .cardOverlayButton-br:not([data-action="menu"]) > .cardOverlayButtonIcon {
+  box-shadow: none;
+  background-color: transparent !important;
+
+  transform: scale(1) !important;
+  width: fit-content;
+  height: fit-content;
+
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%) !important;
+  .cardOverlayButtonIcon {
+    width: fit-content !important;
+    height: fit-content !important;
+    transition: .2s;
+    font-size: 5em !important;
+  }
+  .cardOverlayButtonIcon:hover {
+    color: var(--primary-alt1);
+    transform: scale(1.2);
+  }
+}

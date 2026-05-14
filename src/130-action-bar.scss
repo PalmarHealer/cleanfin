@@ -1,0 +1,4 @@
+/* Add padding to action bar */
+.mainDetailButtons.focuscontainer-x:not(:has(> .btnPlay.hide)) {
+  padding-left: 0.5em;
+}

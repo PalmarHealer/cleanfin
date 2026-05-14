@@ -1,0 +1,8 @@
+/* Hide and only show scrollbuttons on group/section hover */
+.emby-scrollbuttons, [dir="ltr"] .emby-scrollbuttons {
+  opacity: 0;
+  transition-duration: 250ms;
+}
+.emby-scroller-container:hover .emby-scrollbuttons {
+  opacity: 1;
+}

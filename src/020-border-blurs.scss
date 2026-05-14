@@ -1,0 +1,30 @@
+/* Border and blurs */
+.card-hoverable:hover .cardScalable,
+.card-hoverable:hover .visualCardBox,
+.card:focus .cardBox.visualCardBox,
+.card:focus .cardBox:not(.visualCardBox) .cardScalable,
+.cardScalable,
+[data-action="resume"],
+.sliderBubble,
+.btnPlay {
+  border-color: transparent !important;
+}
+.listViewUserDataButtons,
+.headerLeft:has(h3:empty),
+.headerRight,
+.mainDetailButtons.focuscontainer-x,
+.slide .button-container {
+  background-color: var(--primary-background-transparent) !important;
+  border-radius: var(--rounded-cards) !important;
+  backdrop-filter: blur(var(--blur)) !important;
+}
+.iconOsd,
+.playerStats,
+.subtitleSyncContainer,
+.emby-tabs .emby-tab-button:not(.emby-tab-button-active),
+.dialog,
+#loginPage div,
+#jf-profile-dropdown {
+  background-color: var(--primary-background-transparent) !important;
+  backdrop-filter: blur(var(--blur)) !important;
+}

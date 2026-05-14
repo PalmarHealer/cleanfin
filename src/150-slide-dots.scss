@@ -1,0 +1,6 @@
+/* Edit slide dots height */
+@media only screen and (min-width: 767px) {
+  .dots-container {
+    top: calc(70% + 5vh);
+  }
+}

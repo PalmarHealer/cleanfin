@@ -1,0 +1,15 @@
+/* Adjust button bar */
+.slide .button-container {
+  .play-button {
+    order: -1;
+  }
+  button {
+    height: 45px;
+    width: 45px;
+  }
+  button:active {
+    filter: brightness(1.2) !important;
+    transform: scale(.98);
+  }
+  padding: 0.4em 0.5em;
+}

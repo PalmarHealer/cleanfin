@@ -1,0 +1,5 @@
+/* Adjust positioning of cast image alignment in card */
+#castCollapsible .cardContent.cardImageContainer,
+#guestCastContent .cardContent.cardImageContainer {
+  background-position-y: 10%;
+}

@@ -1,0 +1,24 @@
+/* Element hidings */
+[data-id="download"],
+[data-id="downloadall"],
+[data-id="copy-stream"],
+.buttons.focuscontainer-x .btnUserRating,
+.btnPreviousTrack,
+.btnRewind,
+.btnFastForward,
+.btnNextChapter,
+.btnPreviousChapter,
+.endsAt,
+.runTime,
+.misc-info i:last-of-type,
+.chapterThumbText-dim,
+.sliderMarkerContainer,
+#searchPage .searchFields,
+.osdHeader #jf-search-input {
+  display: none;
+}
+
+.osdTimeText {
+  visibility: hidden;
+  opacity: 0;
+}

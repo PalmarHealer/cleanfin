@@ -1,0 +1,19 @@
+/* Format headers */
+.headerLeft:has(h3:empty),
+.headerRight {
+  padding: 3px;
+  position: absolute;
+}
+.headerLeft:has(h3:empty) {
+  left: 20px;
+  .pageTitle {
+    max-width: 100px;
+  }
+}
+.headerRight {
+  right: 20px;
+  z-index: 1;
+}
+.skinHeader-withBackground:not(.noHomeButtonHeader) h3:empty {
+  display: none;
+}

@@ -1,0 +1,4 @@
+/* Change heart icon to filled */
+.material-icons.ratingbutton-icon-withrating::before {
+  font-variation-settings: 'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 48;
+}

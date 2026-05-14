@@ -1,0 +1,5 @@
+/* Change play icon to filled */
+.material-icons.play_arrow::before {
+  content: "play_arrow";
+  font-family: "Material Icons";
+}

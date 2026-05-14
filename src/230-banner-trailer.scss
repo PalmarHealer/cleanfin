@@ -1,0 +1,4 @@
+/* Hide banner icon when trailer is active */
+.slide:has(> .video-container.active) .backdrop-container {
+  display: none;
+}

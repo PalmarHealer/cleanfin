@@ -1,0 +1,4 @@
+/* Disable slide animation */
+.backdrop.animate, .logo.animate {
+  animation: none;
+}

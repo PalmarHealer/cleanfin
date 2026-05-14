@@ -1,0 +1,29 @@
+/* Custom JS element formatting */
+
+/* Search input */
+
+#jf-search-input {
+  width: 0;
+  opacity: 0;
+  padding: 0;
+  margin: 0;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: #fff;
+  font-size: 15px;
+  height: 32px;
+  vertical-align: middle;
+  box-sizing: border-box;
+  outline: none;
+  transition: width 0.35s ease, opacity 0.35s ease, padding 0.35s ease,
+              margin 0.35s ease, border-color 0.35s ease;
+}
+
+#jf-search-input.active {
+  width: 200px;
+  opacity: 1;
+  padding: 0 8px;
+  margin-right: 4px;
+  border-bottom-color: rgba(255, 255, 255, 0.55);
+}

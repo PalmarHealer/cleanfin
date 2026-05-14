@@ -1,0 +1,21 @@
+/* Root styles */
+:root {
+    --primary-r: 229;
+    --primary-g: 56;
+    --primary-b: 59;
+    --primary-accent-color: rgba(var(--primary-r), var(--primary-g), var(--primary-b), 1.0);
+    --secondary-accent-color: #780000;
+    --primary-background-color: #0b090a;
+    --secondary-background-color: #161a1d;
+    --primary-background-transparent: rgba(22,26,29,0.5);
+    --secondary-background-transparent: rgba(11,9,10,0.6);
+    --tertiary-background-transparent: rgba(22,26,29,0.85);
+    --rounded-cards: 50px;
+    --blur: 10px;
+    /* Alternate accents*/
+    --primary-alt1: rgb(calc(var(--primary-r) - 30), calc(var(--primary-g) - 30), calc(var(--primary-b) - 30), 1);
+    --primary-alt2: rgb(calc(var(--primary-r) - 30), calc(var(--primary-g) - 30), calc(var(--primary-b) - 30), 0.85);
+    --primary-alt3: rgb(calc(var(--primary-r) - 30), calc(var(--primary-g) - 30), calc(var(--primary-b) - 30), 0.7);
+    --primary-alt4: rgb(calc(var(--primary-r) - 30), calc(var(--primary-g) - 30), calc(var(--primary-b) - 30), 0.55);
+    --primary-alt5: rgb(calc(var(--primary-r) - 30), calc(var(--primary-g) - 30), calc(var(--primary-b) - 30), 0.4);
+}

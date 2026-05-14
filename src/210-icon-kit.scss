@@ -1,0 +1,18 @@
+/* Change icon kit */
+.slide .button-container {
+  .detail-button::before,
+  .favorite-button::before {
+    font-family: var(--iconPack) !important;
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48 !important;
+  }
+  .detail-button::before {
+    content: '\e88e';
+  }
+  .favorite-button::before {
+    content: "\e87d";
+  }
+  .favorite-button.favorited::before {
+    font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48 !important;
+    color: var(--primary-alt1);
+  }
+}

@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
     paths:
-      - '**.scss'
+      - 'src/**'
       - '.github/workflows/build.yml'
   workflow_dispatch:
 
@@ -24,11 +24,21 @@ jobs:
       - name: Install Sass
         run: npm install -g sass
 
+      - name: Concatenate sources
+        run: |
+          mkdir -p build
+          : > build/_bundle.scss
+          for f in $(ls src/*.scss | sort); do
+            echo "/* === $(basename "$f") === */" >> build/_bundle.scss
+            cat "$f" >> build/_bundle.scss
+            echo "" >> build/_bundle.scss
+          done
+
       - name: Compile expanded CSS
-        run: sass --no-source-map --style=expanded style.scss style.css
+        run: sass --no-source-map --style=expanded build/_bundle.scss style.css
 
       - name: Compile minified CSS
-        run: sass --no-source-map --style=compressed style.scss style.min.css
+        run: sass --no-source-map --style=compressed build/_bundle.scss style.min.css
 
       - name: Commit built files
         run: |

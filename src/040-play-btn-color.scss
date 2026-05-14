@@ -1,0 +1,8 @@
+/* Change play btn color */
+.btnPlay.detailButton {
+  background-color: var(--primary-alt2);
+}
+
+.btnPlay.detailButton:hover {
+  background-color: var(--primary-alt1);
+}

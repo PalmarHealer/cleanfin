@@ -1,0 +1,20 @@
+/* Adjust mobile view to match the desktop */
+.layout-mobile  {
+  .cardOverlayButton-br:not([data-action="menu"]) > .cardOverlayButtonIcon {
+    transform: translate(-50%, 0) !important;
+  }
+  [dir="ltr"] .mainDetailButtons {
+    max-height: 3em !important;
+    flex-direction: column;
+  }
+  .mainDetailButtons.focuscontainer-x:not(:has(> .btnPlay.hide)) {
+    padding: 0.25em 1.25em;
+  }
+  #slides-container {
+    .volume-toggle,
+    .pause-button {
+      top: 11rem;
+      z-index: 1000;
+    }
+  }
+}

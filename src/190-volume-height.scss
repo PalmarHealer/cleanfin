@@ -1,0 +1,8 @@
+/* Fix btn play/pause and volume height button */
+#slides-container {
+  .volume-toggle,
+  .pause-button {
+    top: 8rem;
+    z-index: 1000;
+  }
+}

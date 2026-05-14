@@ -1,0 +1,4 @@
+/* Clear Footer content */
+#myPreferencesMenuPage > div::after, .dashboardFooter::after {
+  content: "" !important;
+}

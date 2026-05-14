@@ -1,0 +1,17 @@
+/* Add same styling to slide change on featured section as the scrollbuttons have */
+#slides-container {
+  .left-arrow {
+    transform: translate(-30%, 0);
+  }
+  .right-arrow {
+    transform: translate(.75em, 0);
+  }
+  .arrow {
+    padding: .75em;
+    border-radius: 50%;
+    transition-duration: 250ms !important;
+  }
+  .arrow:hover {
+    background-color: rgb(255 255 255 / 5%);
+  }
+}
