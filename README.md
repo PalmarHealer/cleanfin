@@ -39,6 +39,30 @@ sass --style=expanded _bundle.scss style.css
 sass --style=compressed _bundle.scss style.min.css
 ```
 
+## Customizer
+
+Optional snippets you can append to your Jellyfin custom CSS depending on which plugins you use:
+
+### Media Bar plugin without trailers
+
+If you use the Media Bar plugin but have trailers disabled, the volume button becomes useless. Hide it:
+
+```css
+.volume-toggle {
+  display: none;
+}
+```
+
+### IntroSkipper plugin
+
+When the IntroSkipper plugin is active, you can tune how long the skip button stays visible:
+
+```css
+:root {
+    --skip-hide-duration: 8s;
+}
+```
+
 ## Credit & License
 
 This theme builds on [NeutralFin](https://github.com/KartoffelChipss/NeutralFin) by KartoffelChipss and is distributed under the same license (GNU GPL v2). See [LICENSE](LICENSE).
