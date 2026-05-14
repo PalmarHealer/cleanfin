@@ -92,6 +92,18 @@ The flag block must appear **before** the bundle `<script>` tag.
 
 </details>
 
+## Recommended plugins
+
+These plugins pair well with the theme. None are required, but several of the SCSS rules and the script bundle are designed with them in mind.
+
+- **[Jellyfin JavaScript Injector](https://github.com/n00bcodr/Jellyfin-JavaScript-Injector)** — *soft dependency for the script bundle.* The cleanest way to load `script.min.js`. See the [Scripts](#scripts) section above.
+- **[File Transformation](https://github.com/IAmParadox27/jellyfin-plugin-file-transformation)** — Base plugin used by several others below. Install first if you plan to use Home Sections, Media Bar, or Collection Sections.
+- **[Home Sections](https://github.com/IAmParadox27/jellyfin-plugin-home-sections)** — Adds customizable home-screen sections. The theme tweaks padding/spacing for these (see `css/330-features-offset.scss`).
+- **[Media Bar](https://github.com/IAmParadox27/jellyfin-plugin-media-bar)** — Featured media bar at the top of the home screen. The theme styles its slide dots, arrows, and button container. See the [Customizer](#customizer) section for an option if you run it without trailers.
+- **[Collection Sections](https://github.com/IAmParadox27/jellyfin-plugin-collection-sections)** — Adds collection-based home sections.
+- **[InPlayerEpisodePreview](https://github.com/Namo2/InPlayerEpisodePreview)** — Hover previews for next/previous episodes inside the player.
+- **[Meilisearch](https://github.com/arnesacnussem/jellyfin-plugin-meilisearch)** — Faster, fuzzier search powered by Meilisearch. Works well with the inline search script.
+
 ## Structure
 
 - `css/` — Each CSS change lives in its own `.scss` file. Files are prefixed with a number so they concatenate in a defined order (`000-imports.scss` and `001-root.scss` come first).
