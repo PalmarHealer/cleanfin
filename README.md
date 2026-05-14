@@ -18,10 +18,14 @@ or the unminified version:
 
 ## Scripts
 
-In addition to the theme, an optional script bundle adds a few client-side enhancements (inline search, profile dropdown, pause spotlight, Firefox warning, log suppression). Load it via Jellyfin's custom JS field:
+In addition to the theme, an optional script bundle adds a few client-side enhancements (inline search, profile dropdown, pause spotlight, Firefox warning, log suppression).
 
-```html
-<script src="https://cdn.jsdelivr.net/gh/PalmarHealer/goodfin@main/script.min.js"></script>
+> **Recommended loader:** Use the [Jellyfin JavaScript Injector](https://github.com/n00bcodr/Jellyfin-JavaScript-Injector) plugin to inject the script — it's far more reliable than editing `index.html` by hand and survives Jellyfin updates.
+
+Point it at:
+
+```
+https://cdn.jsdelivr.net/gh/PalmarHealer/goodfin@main/script.min.js
 ```
 
 ### Disabling individual modules
