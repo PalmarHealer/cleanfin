@@ -1,12 +1,12 @@
-/* goodFin script bundle — toggle individual modules via:
-   window.goodFin = { features: { firefoxWarning: false } };
+/* cleanFin script bundle — toggle individual modules via:
+   window.cleanFin = { features: { firefoxWarning: false } };
    (set this BEFORE this script loads) */
-window.goodFin = window.goodFin || {};
-window.goodFin.features = window.goodFin.features || {};
+window.cleanFin = window.cleanFin || {};
+window.cleanFin.features = window.cleanFin.features || {};
 
 
-/* === 001-suppress-browser-logs (toggle: window.goodFin.features.suppressBrowserLogs = false) === */
-if (window.goodFin.features.suppressBrowserLogs === true) {
+/* === 001-suppress-browser-logs (toggle: window.cleanFin.features.suppressBrowserLogs = false) === */
+if (window.cleanFin.features.suppressBrowserLogs === true) {
 /**
  * Jellyfin Enhancement: Suppress browser logs
  * Silences console.log/warn/error/info/debug so the browser console stays clean.
@@ -19,8 +19,8 @@ if (window.goodFin.features.suppressBrowserLogs === true) {
   console.debug = function () {};
 })();}
 
-/* === 010-firefox-warning (toggle: window.goodFin.features.firefoxWarning = false) === */
-if (window.goodFin.features.firefoxWarning === true) {
+/* === 010-firefox-warning (toggle: window.cleanFin.features.firefoxWarning = false) === */
+if (window.cleanFin.features.firefoxWarning === true) {
 /**
  * Jellyfin Enhancement: Firefox warning
  * Shows a warning popup for Firefox users that it unfortunatly doesn't work properly
@@ -84,8 +84,8 @@ if (window.goodFin.features.firefoxWarning === true) {
 })();
 }
 
-/* === 020-inline-search (toggle: window.goodFin.features.inlineSearch = false) === */
-if (window.goodFin.features.inlineSearch === true) {
+/* === 020-inline-search (toggle: window.cleanFin.features.inlineSearch = false) === */
+if (window.cleanFin.features.inlineSearch === true) {
 /**
  * Jellyfin Enhancement: Netflix-style Inline Search
  * Expanding search input in the navbar; navigates to the native #/search page.
@@ -295,8 +295,8 @@ if (window.goodFin.features.inlineSearch === true) {
 })();
 }
 
-/* === 030-inline-profile (toggle: window.goodFin.features.inlineProfile = false) === */
-if (window.goodFin.features.inlineProfile === true) {
+/* === 030-inline-profile (toggle: window.cleanFin.features.inlineProfile = false) === */
+if (window.cleanFin.features.inlineProfile === true) {
 /**
  * Jellyfin Enhancement: Profile Dropdown
  * Dynamic quick-action menu scraped from #/mypreferencesmenu via hidden iframe.
@@ -481,8 +481,8 @@ if (window.goodFin.features.inlineProfile === true) {
 })();
 }
 
-/* === 040-pause-spotlight (toggle: window.goodFin.features.pauseSpotlight = false) === */
-if (window.goodFin.features.pauseSpotlight === true) {
+/* === 040-pause-spotlight (toggle: window.cleanFin.features.pauseSpotlight = false) === */
+if (window.cleanFin.features.pauseSpotlight === true) {
 /**
  * Jellyfin Enhancement: Pause Spotlight
  * Shows a cinematic overlay (logo, metadata, overview) when playback is paused
