@@ -47,6 +47,8 @@ When the IntroSkipper plugin is active, you can tune how long the skip button st
 
 In addition to the theme, an optional script bundle adds a few client-side enhancements (inline search, profile dropdown, pause spotlight, Firefox warning, log suppression).
 
+> **The scripts are designed as additions to the theme.** They rely on CSS rules from goodFin to position and style the elements they create. If the theme is not loaded, the bundle will auto-inject `style.min.css` and emit a console warning.
+
 > **Recommended loader:** Use the [Jellyfin JavaScript Injector](https://github.com/n00bcodr/Jellyfin-JavaScript-Injector) plugin to inject the script — it's far more reliable than editing `index.html` by hand and survives Jellyfin updates.
 
 Paste the following into the injector. Each module is **opt-in** — flip the ones you want to `true`. New modules added later default to off, so updates can't silently enable anything.
