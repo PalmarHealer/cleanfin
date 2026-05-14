@@ -1,5 +1,7 @@
+/* === 000-imports.scss === */
 /* Imports */
 @import url("https://cdn.jsdelivr.net/gh/KartoffelChipss/NeutralFin@latest/theme/neutralfin-minified.css");
+/* === 001-root.scss === */
 /* Root styles */
 :root {
   --primary-r: 229;
@@ -22,6 +24,7 @@
   --primary-alt5: rgb(calc(var(--primary-r) - 30), calc(var(--primary-g) - 30), calc(var(--primary-b) - 30), 0.4);
 }
 
+/* === 010-element-hidings.scss === */
 /* Element hidings */
 [data-id=download],
 [data-id=downloadall],
@@ -47,6 +50,7 @@
   opacity: 0;
 }
 
+/* === 020-border-blurs.scss === */
 /* Border and blurs */
 .card-hoverable:hover .cardScalable,
 .card-hoverable:hover .visualCardBox,
@@ -80,6 +84,7 @@
   backdrop-filter: blur(var(--blur)) !important;
 }
 
+/* === 030-format-headers.scss === */
 /* Format headers */
 .headerLeft:has(h3:empty),
 .headerRight {
@@ -103,6 +108,7 @@
   display: none;
 }
 
+/* === 040-play-btn-color.scss === */
 /* Change play btn color */
 .btnPlay.detailButton {
   background-color: var(--primary-alt2);
@@ -112,6 +118,7 @@
   background-color: var(--primary-alt1);
 }
 
+/* === 050-scrubbing-preview.scss === */
 /* Format scrubbing preview */
 .chapterThumbText {
   text-align: center;
@@ -121,16 +128,19 @@
   padding-bottom: 0.4em;
 }
 
+/* === 060-buffer-indicator.scss === */
 /* Round buffer indicator on progressbar */
 .mdl-slider-background-upper {
   border-radius: var(--rounded-cards) !important;
 }
 
+/* === 070-pause-play-btn.scss === */
 /* Reset pause/play btn */
 .btnPause {
   font-size: inherit !important;
 }
 
+/* === 080-play-btn-cards.scss === */
 /* Format play btn on cards*/
 .cardOverlayContainer > .cardOverlayFab-primary,
 .layout-mobile .cardOverlayButton-br:not([data-action=menu]) > .cardOverlayButtonIcon {
@@ -156,6 +166,7 @@
   transform: scale(1.2);
 }
 
+/* === 090-play-btn-season.scss === */
 /* Format play btn on cards in a season view*/
 div[data-type=Episode] {
   transition: transform 0.5s;
@@ -216,47 +227,56 @@ div[data-type=Episode] div div .listItemImageButton span:before {
   font-size: 5em;
 }
 
+/* === 100-episode-counter.scss === */
 /* Adjust episode counter bg */
 .countIndicator, .fullSyncIndicator, .mediaSourceIndicator {
   background-color: var(--primary-alt1);
 }
 
+/* === 110-progressbar-cards.scss === */
 /* Adjust progressbar position on cards */
 .chapterThumbTextContainer, .innerCardFooter {
   padding-bottom: 1em;
 }
 
+/* === 120-bottom-padding.scss === */
 /* Fix bottom padding */
 .detailPageWrapperContainer {
   padding-bottom: 10em !important;
 }
 
+/* === 130-action-bar.scss === */
 /* Add padding to action bar */
 .mainDetailButtons.focuscontainer-x:not(:has(> .btnPlay.hide)) {
   padding-left: 0.5em;
 }
 
+/* === 140-login-disclaimer.scss === */
 /* Full width login disclaimer */
 .loginDisclaimer {
   width: 100%;
 }
 
+/* === 150-slide-dots.scss === */
 /* Edit slide dots height */
 @media only screen and (min-width: 767px) {
   .dots-container {
     top: calc(70% + 5vh);
   }
 }
+/* === 160-slide-animation.scss === */
 /* Disable slide animation */
 .backdrop.animate, .logo.animate {
   animation: none;
 }
 
+/* === 170-max-text-width.scss === */
 /* Limit max text width */
 .plot {
   max-width: 50%;
 }
 
+/* === 180-button-bar.scss === */
 /* Adjust button bar */
 .slide .button-container .play-button {
   order: -1;
@@ -273,6 +293,7 @@ div[data-type=Episode] div div .listItemImageButton span:before {
   padding: 0.4em 0.5em;
 }
 
+/* === 190-volume-height.scss === */
 /* Fix btn play/pause and volume height button */
 #slides-container .volume-toggle,
 #slides-container .pause-button {
@@ -280,12 +301,14 @@ div[data-type=Episode] div div .listItemImageButton span:before {
   z-index: 1000;
 }
 
+/* === 200-play-icon-filled.scss === */
 /* Change play icon to filled */
 .material-icons.play_arrow::before {
   content: "play_arrow";
   font-family: "Material Icons";
 }
 
+/* === 210-icon-kit.scss === */
 /* Change icon kit */
 .slide .button-container .detail-button::before,
 .slide .button-container .favorite-button::before {
@@ -303,32 +326,38 @@ div[data-type=Episode] div div .listItemImageButton span:before {
   color: var(--primary-alt1);
 }
 
+/* === 220-sync-red-color.scss === */
 /* Sync red color */
 .ratingbutton-icon-withrating {
   color: var(--primary-alt1);
 }
 
+/* === 230-banner-trailer.scss === */
 /* Hide banner icon when trailer is active */
 .slide:has(> .video-container.active) .backdrop-container {
   display: none;
 }
 
+/* === 240-footer-content.scss === */
 /* Clear Footer content */
 #myPreferencesMenuPage > div::after, .dashboardFooter::after {
   content: "" !important;
 }
 
+/* === 250-cast-image.scss === */
 /* Adjust positioning of cast image alignment in card */
 #castCollapsible .cardContent.cardImageContainer,
 #guestCastContent .cardContent.cardImageContainer {
   background-position-y: 10%;
 }
 
+/* === 260-heart-icon.scss === */
 /* Change heart icon to filled */
 .material-icons.ratingbutton-icon-withrating::before {
   font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 48;
 }
 
+/* === 270-skip-btn.scss === */
 /* Format skip btn */
 .skip-button-container {
   bottom: 10%;
@@ -343,6 +372,7 @@ div[data-type=Episode] div div .listItemImageButton span:before {
   transform: scale(0.98);
 }
 
+/* === 280-search-input.scss === */
 /* Custom JS element formatting */
 /* Search input */
 #jf-search-input {
@@ -370,6 +400,7 @@ div[data-type=Episode] div div .listItemImageButton span:before {
   border-bottom-color: rgba(255, 255, 255, 0.55);
 }
 
+/* === 290-profile-dropdown.scss === */
 /* Profile dropdown */
 #jf-profile-dropdown {
   display: none;
@@ -387,6 +418,7 @@ div[data-type=Episode] div div .listItemImageButton span:before {
   border-radius: 0;
 }
 
+/* === 300-mobile-view.scss === */
 /* Adjust mobile view to match the desktop */
 .layout-mobile .cardOverlayButton-br:not([data-action=menu]) > .cardOverlayButtonIcon {
   transform: translate(-50%, 0) !important;
@@ -404,21 +436,25 @@ div[data-type=Episode] div div .listItemImageButton span:before {
   z-index: 1000;
 }
 
+/* === 310-home-sections-input.scss === */
 /* Fix Home Screen Sections order input with */
 input[data-id=txtOrderIndex] {
   min-width: 75px;
 }
 
+/* === 320-scrollbuttons-padding.scss === */
 /* Update scrollbuttons padding */
 .emby-scrollbuttons, [dir=ltr] .emby-scrollbuttons {
   padding-top: 0 !important;
 }
 
+/* === 330-features-offset.scss === */
 /* Offset content to make space for features section */
 .sections.homeSectionsContainer {
   padding-top: 2em;
 }
 
+/* === 340-scrollbuttons-hide.scss === */
 /* Hide and only show scrollbuttons on group/section hover */
 .emby-scrollbuttons, [dir=ltr] .emby-scrollbuttons {
   opacity: 0;
@@ -429,6 +465,7 @@ input[data-id=txtOrderIndex] {
   opacity: 1;
 }
 
+/* === 350-slide-change-arrows.scss === */
 /* Add same styling to slide change on featured section as the scrollbuttons have */
 #slides-container .left-arrow {
   transform: translate(-30%, 0);
