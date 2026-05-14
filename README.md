@@ -22,32 +22,48 @@ In addition to the theme, an optional script bundle adds a few client-side enhan
 
 > **Recommended loader:** Use the [Jellyfin JavaScript Injector](https://github.com/n00bcodr/Jellyfin-JavaScript-Injector) plugin to inject the script — it's far more reliable than editing `index.html` by hand and survives Jellyfin updates.
 
-Point it at:
+Paste the following into the injector. Each module is **opt-in** — flip the ones you want to `true`. New modules added later default to off, so updates can't silently enable anything.
 
+```js
+window.goodFin = {
+  features: {
+    suppressBrowserLogs: false,
+    firefoxWarning:      false,
+    inlineSearch:        false,
+    inlineProfile:       false,
+    pauseSpotlight:      false
+  }
+};
+(function () {
+  var s = document.createElement('script');
+  s.src = 'https://cdn.jsdelivr.net/gh/PalmarHealer/goodfin@main/script.min.js';
+  document.head.appendChild(s);
+})();
 ```
-https://cdn.jsdelivr.net/gh/PalmarHealer/goodfin@main/script.min.js
-```
 
-### Disabling individual modules
+<details>
+<summary>Alternative: load via plain HTML <code>&lt;script&gt;</code> tags</summary>
 
-Set a `window.goodFin.features` flag to `false` **before** the bundle loads:
+If you can't use the injector plugin and are editing `index.html` (or another HTML host) directly:
 
 ```html
 <script>
   window.goodFin = {
     features: {
-      suppressBrowserLogs: true,
-      firefoxWarning:      true,
-      inlineSearch:        true,
-      inlineProfile:       true,
-      pauseSpotlight:      true
+      suppressBrowserLogs: false,
+      firefoxWarning:      false,
+      inlineSearch:        false,
+      inlineProfile:       false,
+      pauseSpotlight:      false
     }
   };
 </script>
 <script src="https://cdn.jsdelivr.net/gh/PalmarHealer/goodfin@main/script.min.js"></script>
 ```
 
-Set any feature to `false` to skip it. Omitted keys default to enabled.
+The flag block must appear **before** the bundle `<script>` tag.
+
+</details>
 
 ## Structure
 

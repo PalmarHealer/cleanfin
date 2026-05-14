@@ -66,7 +66,7 @@ jobs:
             {
               echo ""
               echo "/* === $base (toggle: window.goodFin.features.$key = false) === */"
-              echo "if (window.goodFin.features.$key !== false) {"
+              echo "if (window.goodFin.features.$key === true) {"
               cat "$f"
               echo "}"
             } >> build/_bundle.js
