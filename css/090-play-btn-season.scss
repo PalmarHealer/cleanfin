@@ -9,10 +9,6 @@ div[data-type="Episode"] {
     background-size: 100%;
     transition: background-size .5s;
 
-    .indicators {
-      z-index: 2;
-    }
-
     &::after {
       backdrop-filter: blur(0px);
       border-radius: var(--smallRadius);
