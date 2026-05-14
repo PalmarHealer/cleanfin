@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
     paths:
-      - 'src/**'
+      - 'css/**'
       - 'js/**'
       - '.github/workflows/build.yml'
   workflow_dispatch:
@@ -30,7 +30,7 @@ jobs:
         run: |
           mkdir -p build
           : > build/_bundle.scss
-          for f in $(ls src/*.scss | sort); do
+          for f in $(ls css/*.scss | sort); do
             echo "/* === $(basename "$f") === */" >> build/_bundle.scss
             cat "$f" >> build/_bundle.scss
             echo "" >> build/_bundle.scss
