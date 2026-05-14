@@ -169,11 +169,11 @@
 }
 
 /* === 090-play-btn-season.scss === */
-/* Format play btn on cards in a season view*/
+/* Format play btn on cards in a season view */
 div[data-type=Episode] {
   transition: transform 0.5s;
 }
-div[data-type=Episode]:hover {
+div[data-type=Episode]:not(.verticalSection):hover {
   transform: scale(1.01);
 }
 div[data-type=Episode] div.listItemImage {
@@ -187,7 +187,8 @@ div[data-type=Episode] div.listItemImage::after {
   backdrop-filter: blur(0px);
   border-radius: var(--smallRadius);
   width: 100%;
-  height: 100%;
+  height: 101%;
+  top: -1%;
   content: "";
   position: absolute;
   inset: 0;
