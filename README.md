@@ -24,7 +24,7 @@ Add the following to your Jellyfin custom CSS:
 <details>
 <summary>For offline use / entire compiled CSS</summary>
 
-The all-in-one build (`style.aio.css` / `style.aio.min.css`) inlines the upstream NeutralFin CSS at build time, so the theme keeps working if the NeutralFin CDN goes down or you're using Jellyfin offline.
+The all-in-one build (`style.aio.css` / `style.aio.min.css`) inlines the upstream theme chain (NeutralFin → ElegantFin) at build time, so CleanFin keeps working if either of the upstream CDNs goes down or you're using Jellyfin offline.
 
 ```css
 @import url('https://cdn.jsdelivr.net/gh/PalmarHealer/cleanfin@main/style.aio.min.css');
