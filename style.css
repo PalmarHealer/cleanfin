@@ -1,9 +1,11 @@
+@charset "UTF-8";
 /* === 000-imports.scss === */
 /* Imports */
 @import url("https://cdn.jsdelivr.net/gh/KartoffelChipss/NeutralFin@latest/theme/neutralfin-minified.css");
 /* === 001-root.scss === */
 /* Root styles */
 :root {
+  --goodfin: 1; /* sentinel — scripts check for this before running */
   --primary-r: 229;
   --primary-g: 56;
   --primary-b: 59;

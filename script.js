@@ -4,6 +4,28 @@
 window.goodFin = window.goodFin || {};
 window.goodFin.features = window.goodFin.features || {};
 
+/* Enforce theme: these scripts are designed as additions to the goodFin CSS.
+   If the theme sentinel (--goodfin) is missing, auto-load style.min.css. */
+(function () {
+  function hasTheme() {
+    return getComputedStyle(document.documentElement).getPropertyValue('--goodfin').trim() !== '';
+  }
+  function injectTheme() {
+    if (document.querySelector('link[data-goodfin]')) return;
+    var l = document.createElement('link');
+    l.rel = 'stylesheet';
+    l.href = 'https://cdn.jsdelivr.net/gh/PalmarHealer/goodfin@main/style.min.css';
+    l.dataset.goodfin = '1';
+    (document.head || document.documentElement).appendChild(l);
+    console.warn('[goodFin] theme CSS was not detected — auto-loaded style.min.css. The scripts are designed as additions to the theme.');
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () { if (!hasTheme()) injectTheme(); }, { once: true });
+  } else if (!hasTheme()) {
+    injectTheme();
+  }
+})();
+
 
 /* === 001-suppress-browser-logs (toggle: window.goodFin.features.suppressBrowserLogs = false) === */
 if (window.goodFin.features.suppressBrowserLogs === true) {
