@@ -52,11 +52,11 @@ jobs:
         run: |
           mkdir -p build
           {
-            echo "/* goodFin script bundle — toggle individual modules via:"
-            echo "   window.goodFin = { features: { firefoxWarning: false } };"
+            echo "/* cleanFin script bundle — toggle individual modules via:"
+            echo "   window.cleanFin = { features: { firefoxWarning: false } };"
             echo "   (set this BEFORE this script loads) */"
-            echo "window.goodFin = window.goodFin || {};"
-            echo "window.goodFin.features = window.goodFin.features || {};"
+            echo "window.cleanFin = window.cleanFin || {};"
+            echo "window.cleanFin.features = window.cleanFin.features || {};"
             echo ""
           } > build/_bundle.js
 
@@ -70,8 +70,8 @@ jobs:
             key=$(to_camel "$name")
             {
               echo ""
-              echo "/* === $base (toggle: window.goodFin.features.$key = false) === */"
-              echo "if (window.goodFin.features.$key === true) {"
+              echo "/* === $base (toggle: window.cleanFin.features.$key = false) === */"
+              echo "if (window.cleanFin.features.$key === true) {"
               cat "$f"
               echo "}"
             } >> build/_bundle.js
