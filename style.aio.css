@@ -1269,3 +1269,25 @@ input[data-id=txtOrderIndex] {
 #slides-container .arrow:hover {
   background-color: rgba(255, 255, 255, 0.05);
 }
+
+/* === 360-card-active-reflection.scss === */
+/* Card reflection sweep: keep it settled while a card is active */
+/*
+ * ElegantFin sweeps a gradient across `.cardOverlayContainer::after` on hover,
+ * moving it from -100% to +100% over 0.65s. The end position is bound to
+ * `:hover` alone, so as soon as a card is `:active` without being hovered —
+ * touch, keyboard activation, or press-and-drag off the card — the transform
+ * reverts and the gradient animates back across the artwork, parking a hard
+ * diagonal edge in the middle of the image.
+ *
+ * Binding `:active` to the same end position as `:hover` keeps the sweep where
+ * it belongs. Actors are covered too: their cards use the same overlay.
+ */
+.card-hoverable:active .cardOverlayContainer::after {
+  transform: translateY(100%) translateX(0);
+}
+
+.backdropCard.card-hoverable:active .cardOverlayContainer::after,
+.overflowBackdropCard.card-hoverable:active .cardOverlayContainer::after {
+  transform: translateY(0) translateX(100%);
+}

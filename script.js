@@ -1612,6 +1612,11 @@ if (window.cleanFin.features.mediaSpecs === true) {
         { re: /\b(karaoke|songs?|lyrics|signs?)\b/i,                 label: 'Signs & Songs' }
     ];
 
+    // Titles that only say "this is the normal track". A track without a
+    // Forced marker already is the full one, so the word adds nothing —
+    // and left in, it reads as a stray lowercase label ("Deutsch · komplett").
+    var REDUNDANT = /^(komplett|kompletto?|complete|full|voll|vollständig|standard|default|normal|main|haupt|regular|dialogue|dialog)$/i;
+
     // Titles that only restate technical data, or are a release/file name.
     var NOISE = [
         /^\s*\d+(\.\d+)?\s*(k|m)?bps\b/i,        // "6 Mbps ..."
@@ -1706,6 +1711,7 @@ if (window.cleanFin.features.mediaSpecs === true) {
         var title = String(stream.Title || '').trim();
         if (!title || title.length > 40) return '';
 
+        if (REDUNDANT.test(title)) return '';
         for (var i = 0; i < MARKERS.length; i++) if (MARKERS[i].re.test(title)) return '';
         for (var j = 0; j < NOISE.length; j++) if (NOISE[j].test(title)) return '';
 
@@ -1718,7 +1724,8 @@ if (window.cleanFin.features.mediaSpecs === true) {
         var lang = languageName(stream.Language);
         if (lang && title.toLowerCase() === lang.toLowerCase()) return '';
 
-        return title;
+        // Embedded titles are often all-lowercase; match the rest of the label.
+        return title.charAt(0).toUpperCase() + title.slice(1);
     }
 
     // "Spanisch (Europa)" rather than "Spanisch · Europa".
@@ -1837,5 +1844,62 @@ if (window.cleanFin.features.mediaSpecs === true) {
     // poll rather than trying to catch a single render event.
     setInterval(run, 300);
     window.addEventListener('hashchange', function () { lastRun = ''; });
+})();
+}
+
+/* === 100-backdrop-guard (toggle: window.cleanFin.features.backdropGuard = false) === */
+if (window.cleanFin.features.backdropGuard === true) {
+/**
+ * Jellyfin Enhancement: Backdrop guard
+ *
+ * The Media Bar plugin paints a full-page backdrop for its home-screen
+ * slideshow (`.backdropImage.slideshow-page-backdrop`, sitting in Jellyfin's
+ * global `.backdropContainer`, outside any page element). On navigation it
+ * normally removes that element again — but the removal races with the
+ * transition, and on a slow connection it consistently loses: the previous
+ * slide's image stays up on the new page until something else repaints.
+ *
+ * The result is a detail page showing an unrelated title's artwork. Jellyfin's
+ * own detail backdrop (`#itemBackdrop`) is empty at that moment, so the stale
+ * slideshow image is what the viewer sees.
+ *
+ * This hides that element whenever the home screen is not the active page, so
+ * the gap shows nothing instead of the wrong artwork. It is deliberately not
+ * `display: none` — the plugin keeps managing the element, we only stop it
+ * from being visible where it does not belong.
+ */
+(function () {
+    'use strict';
+
+    var CLASS = 'cf-hide-slideshow-backdrop';
+
+    var style = document.createElement('style');
+    style.id = 'cf-backdrop-guard';
+    style.textContent =
+        'html.' + CLASS + ' .slideshow-page-backdrop{' +
+        'opacity:0!important;transition:none!important}';
+    document.head.appendChild(style);
+
+    function onHome() {
+        // Route first: it flips before the DOM settles, which is the whole point.
+        if (/^#\/(home|index\.html)?(\?|$)/.test(window.location.hash)) return true;
+        if (/^#\/home/.test(window.location.hash)) return true;
+        return !!document.querySelector('#indexPage:not(.hide)');
+    }
+
+    function update() {
+        var hide = !onHome();
+        var root = document.documentElement;
+        if (root.classList.contains(CLASS) !== hide) root.classList.toggle(CLASS, hide);
+    }
+
+    window.addEventListener('hashchange', update);
+    window.addEventListener('popstate', update);
+
+    // Jellyfin swaps pages asynchronously and the plugin can insert its backdrop
+    // at any point during the transition, so re-check rather than trusting a
+    // single event to be the last word.
+    setInterval(update, 200);
+    update();
 })();
 }
