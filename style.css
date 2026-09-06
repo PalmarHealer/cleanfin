@@ -1,11 +1,24 @@
 @charset "UTF-8";
 /* === 000-imports.scss === */
 /* Imports */
-@import url("https://cdn.jsdelivr.net/gh/KartoffelChipss/NeutralFin@latest/theme/neutralfin-minified.css");
+/*
+ * Upstream: ElegantFin by lscambo13 — https://github.com/lscambo13/ElegantFin
+ *
+ * Pinned to an explicit tag on purpose. Do NOT switch this to @latest:
+ * jsDelivr resolves `ElegantFin@latest` to v25.12.31, because tags like
+ * v26.09.05 contain leading zeros and are therefore not valid semver, so
+ * jsDelivr skips them. @latest would silently pin you to an older release.
+ *
+ * To adopt a newer upstream, bump the tag AND the filename together — the
+ * "build-latest-minified" file is versioned per tag, not globally latest.
+ */
+@import url("https://cdn.jsdelivr.net/gh/lscambo13/ElegantFin@v26.09.05/Theme/ElegantFin-jellyfin-theme-build-latest-minified.css");
 /* === 001-root.scss === */
 /* Root styles */
 :root {
   --cleanfin: 1; /* sentinel — lets scripts check that the theme is loaded */
+  /* Footer lineage — previously supplied by NeutralFin, now owned by CleanFin */
+  --elegantFinFooterText: 'CleanFin based on ElegantFin v26.09.05';
   --primary-r: 229;
   --primary-g: 56;
   --primary-b: 59;
@@ -24,6 +37,138 @@
   --primary-alt3: rgb(calc(var(--primary-r) - 30), calc(var(--primary-g) - 30), calc(var(--primary-b) - 30), 0.7);
   --primary-alt4: rgb(calc(var(--primary-r) - 30), calc(var(--primary-g) - 30), calc(var(--primary-b) - 30), 0.55);
   --primary-alt5: rgb(calc(var(--primary-r) - 30), calc(var(--primary-g) - 30), calc(var(--primary-b) - 30), 0.4);
+}
+
+/* === 002-upstream-palette.scss === */
+/*
+ * Neutral grey palette
+ *
+ * ElegantFin ships a blue/purple palette. The grey scheme CleanFin inherited
+ * used to come from NeutralFin, which is no longer in the import chain.
+ * These are the variables that were verified to actually change rendering —
+ * notation-only differences (rgba vs hsla, quote style, whitespace) and
+ * variables ElegantFin v26.09.05 no longer references (--uiAccentColor,
+ * --activeColor, --activeColorAlpha, --headerBlurLayerVisibility,
+ * --hoverGradientA/B, --backdropPositionY) were deliberately left out.
+ *
+ * Derived from NeutralFin by KartoffelChipss (GNU GPL-2.0).
+ */
+:root {
+  /* Surfaces */
+  --darkerGradientPoint: #131313;
+  --darkerGradientPointAlpha: rgba(17, 17, 17, 0.85);
+  --lighterGradientPoint: #1e1e1e;
+  --lighterGradientPointAlpha: rgba(30, 30, 30, 0.85);
+  --tableBodyColor: rgb(31, 31, 31);
+  /* Chrome (header / drawer) */
+  --headerColor: rgba(40, 40, 40, 0.5);
+  --drawerColor: rgba(40, 40, 40, 0.9);
+  --headerColorGradient: linear-gradient(
+      180deg,
+      rgba(40, 40, 40, 0.95) 30%,
+      55%,
+      transparent 90%
+  );
+  --headerColorGradientAlt: linear-gradient(180deg, rgba(40, 40, 40, 0.95), 70%, transparent);
+  /* Borders */
+  --borderColor: rgb(71, 71, 71);
+  --darkerBorderColor: rgb(51, 51, 51);
+  /* Controls */
+  --selectorBackgroundColor: rgb(60, 60, 60);
+  --selectorBackgroundColorAlpha: rgba(60, 60, 60, 0.5);
+  --btnSubmitColor: rgb(90, 90, 90);
+  --btnSubmitBorderColor: rgb(130, 130, 130);
+  --checkboxCheckedBgColor: rgb(100, 100, 100);
+  --highlightOutlineColor: rgb(110, 110, 110);
+}
+
+/* === 003-upstream-fixes.scss === */
+/*
+ * Media Bar plugin fixes
+ *
+ * Previously inherited from NeutralFin, which is no longer in the import
+ * chain. Each rule below was verified against a live Jellyfin instance to
+ * still take effect on top of ElegantFin v26.09.05.
+ *
+ * Derived from NeutralFin by KartoffelChipss (GNU GPL-2.0).
+ */
+/*
+ * Container spans the app bar area.
+ *
+ * NeutralFin also set `margin-top: calc(var(--appBarHeight) * -1)` here.
+ * That must NOT be carried over: ElegantFin v26.09.05 performs the app-bar
+ * offset itself, so the extra margin double-shifts the media bar (verified
+ * against a live instance: it moved the container up by a further 74.4px).
+ * Only the height compensation is still needed.
+ */
+#slides-container {
+  height: calc(100% + var(--appBarHeight));
+}
+
+/* Keep the media bar buttons visually consistent with each other */
+.detailButton.detail-button,
+.detailButton.detail-button:not(.btnPlay) {
+  margin: 0 !important;
+  background: buttonface !important;
+  color: inherit !important;
+}
+
+.btnPlay.detailButton.play-button {
+  margin-right: 0 !important;
+}
+
+.favorite-button {
+  margin: 0 !important;
+  background: buttonface !important;
+  color: inherit !important;
+}
+
+.favorite-button.favorited {
+  color: red;
+}
+
+/* Age rating tag inherited the wrong color */
+.age-rating {
+  color: inherit !important;
+  border-color: inherit !important;
+  margin-bottom: -3px !important;
+}
+
+/* === 005-fonts.scss === */
+/*
+ * Inter, self-hosted
+ *
+ * ElegantFin pulls Inter from fonts.googleapis.com. These declarations use the
+ * variable font from https://github.com/rsms/inter (v4.1, SIL Open Font
+ * License 1.1 — see fonts/LICENSE.txt) served from this repo instead.
+ *
+ * This file must sort AFTER 000-imports.scss: both declare the family "Inter",
+ * and the later declaration is the one the browser uses, so no font files are
+ * ever fetched from fonts.gstatic.com.
+ *
+ * The upstream @import to fonts.googleapis.com still issues one CSS request in
+ * style.css / style.min.css, because it lives inside the imported upstream file
+ * and CSS cannot cancel an @import. The all-in-one build strips it, so
+ * style.aio.css / style.aio.min.css contact Google not at all and additionally
+ * carry the font inline as base64 (see .github/workflows/build.yml).
+ */
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("https://cdn.jsdelivr.net/gh/PalmarHealer/cleanfin@main/fonts/InterVariable.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("https://cdn.jsdelivr.net/gh/PalmarHealer/cleanfin@main/fonts/InterVariable-Italic.woff2") format("woff2");
+}
+:root {
+  /* Inter ships an optical-size axis; let the browser drive it */
+  font-optical-sizing: auto;
 }
 
 /* === 010-element-hidings.scss === */
