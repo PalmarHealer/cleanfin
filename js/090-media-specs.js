@@ -146,6 +146,11 @@
         { re: /\b(karaoke|songs?|lyrics|signs?)\b/i,                 label: 'Signs & Songs' }
     ];
 
+    // Titles that only say "this is the normal track". A track without a
+    // Forced marker already is the full one, so the word adds nothing —
+    // and left in, it reads as a stray lowercase label ("Deutsch · komplett").
+    var REDUNDANT = /^(komplett|kompletto?|complete|full|voll|vollständig|standard|default|normal|main|haupt|regular|dialogue|dialog)$/i;
+
     // Titles that only restate technical data, or are a release/file name.
     var NOISE = [
         /^\s*\d+(\.\d+)?\s*(k|m)?bps\b/i,        // "6 Mbps ..."
@@ -240,6 +245,7 @@
         var title = String(stream.Title || '').trim();
         if (!title || title.length > 40) return '';
 
+        if (REDUNDANT.test(title)) return '';
         for (var i = 0; i < MARKERS.length; i++) if (MARKERS[i].re.test(title)) return '';
         for (var j = 0; j < NOISE.length; j++) if (NOISE[j].test(title)) return '';
 
@@ -252,7 +258,8 @@
         var lang = languageName(stream.Language);
         if (lang && title.toLowerCase() === lang.toLowerCase()) return '';
 
-        return title;
+        // Embedded titles are often all-lowercase; match the rest of the label.
+        return title.charAt(0).toUpperCase() + title.slice(1);
     }
 
     // "Spanisch (Europa)" rather than "Spanisch · Europa".

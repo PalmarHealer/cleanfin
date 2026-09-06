@@ -110,7 +110,8 @@ window.cleanFin = {
     searchGrid:          false,
     autoRedirect:        false,
     overviewExpander:    false,
-    mediaSpecs:          false
+    mediaSpecs:          false,
+    backdropGuard:       false
   }
 };
 (function () {
@@ -134,6 +135,7 @@ window.cleanFin = {
 | `autoRedirect` | Skips the native login page. **Needs configuration — see below.** |
 | `overviewExpander` | Animates the description "show more" toggle and stops the text from jumping when it opens. |
 | `mediaSpecs` | Rewrites the Video / Audio / Subtitle dropdowns into one readable form and collapses duplicate tracks. |
+| `backdropGuard` | Hides the Media Bar plugin's slideshow backdrop outside the home screen, so a slow page change shows nothing rather than the previous slide's artwork. |
 
 #### What `mediaSpecs` shows
 
@@ -210,7 +212,8 @@ If you can't use the injector plugin and are editing `index.html` (or another HT
       searchGrid:          false,
       autoRedirect:        false,
       overviewExpander:    false,
-      mediaSpecs:          false
+      mediaSpecs:          false,
+      backdropGuard:       false
     }
   };
 </script>
