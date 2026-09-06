@@ -90,7 +90,7 @@ When the IntroSkipper plugin is active, you can tune how long the skip button st
 
 ## Scripts
 
-In addition to the theme, an optional script bundle adds a few client-side enhancements (inline search, profile dropdown, pause spotlight, Quick Connect popup, flat search grid, auto login redirect, Firefox warning, log suppression).
+In addition to the theme, an optional script bundle adds a few client-side enhancements (inline search, profile dropdown, pause spotlight, Quick Connect popup, flat search grid, auto login redirect, description expander, media spec labels, Firefox warning, log suppression).
 
 > **Note:** The scripts are designed as additions to the theme. They work standalone, but several modules (inline search, profile dropdown) create elements that CleanFin styles — without the theme they will look unstyled. For the intended look, load both.
 
@@ -108,7 +108,9 @@ window.cleanFin = {
     pauseSpotlight:      false,
     quickConnectPopup:   false,
     searchGrid:          false,
-    autoRedirect:        false
+    autoRedirect:        false,
+    overviewExpander:    false,
+    mediaSpecs:          false
   }
 };
 (function () {
@@ -130,6 +132,37 @@ window.cleanFin = {
 | `quickConnectPopup` | Turns the profile dropdown's "Quick Connect" entry into an in-page modal. Independent of `inlineProfile`. |
 | `searchGrid` | Replaces the search page's per-type sliders with one relevance-sorted grid. |
 | `autoRedirect` | Skips the native login page. **Needs configuration — see below.** |
+| `overviewExpander` | Animates the description "show more" toggle and stops the text from jumping when it opens. |
+| `mediaSpecs` | Rewrites the Video / Audio / Subtitle dropdowns into one readable form and collapses duplicate tracks. |
+
+#### What `mediaSpecs` shows
+
+Track dropdowns are rebuilt from the structured `MediaStreams` data rather than
+from the rendered text, so the result is the same regardless of what a release
+group wrote into the embedded stream titles:
+
+| Jellyfin | CleanFin |
+| --- | --- |
+| `6 Mbps AVC MPEG-4 - 1080p - H264 - SDR` | `Full HD (1080p)` |
+| `tvp-sherlock-s01e01-br-1080p - H264 - SDR` | `Full HD (1080p)` |
+| `5.1 AC3 @ 640 kbps - German - Dolby Digital - Standard` | `Deutsch · Dolby Digital 5.1` |
+| `German - Dolby Digital Plus + Dolby Atmos - 5.1` | `Deutsch · Dolby Atmos 5.1` |
+| `Commentary - German - DVDSUB` | `Deutsch · Commentary · Bild` |
+| `German Forced - Standard - Erzwungen - SUBRIP` | `Deutsch · Forced` |
+| `European Spanish - SUBRIP` | `Spanisch (Europa)` |
+
+Notes on the choices:
+
+- **Resolution is derived from width, not height.** A scope print at 1920x816
+  is still 1080p; classifying it by height would call it 576p.
+- **`Bild` marks bitmap subtitles** (VobSub/PGS). Those cannot follow the
+  viewer's subtitle styling and may force the server to transcode, so the
+  format is surfaced only when it has a consequence. Text formats stay bare.
+- **`Forced` is only applied to subtitles.** Jellyfin also sets `IsForced` on
+  default *audio* tracks, where it means "default" instead.
+- **Duplicate tracks are collapsed.** One test title ships 53 subtitle
+  streams that reduce to 28 distinct entries; the selected track is never
+  removed.
 
 #### Language of `firefoxWarning`
 
@@ -175,7 +208,9 @@ If you can't use the injector plugin and are editing `index.html` (or another HT
       pauseSpotlight:      false,
       quickConnectPopup:   false,
       searchGrid:          false,
-      autoRedirect:        false
+      autoRedirect:        false,
+      overviewExpander:    false,
+      mediaSpecs:          false
     }
   };
 </script>
