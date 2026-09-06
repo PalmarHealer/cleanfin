@@ -23,7 +23,15 @@ if (window.cleanFin.features.suppressBrowserLogs === true) {
 if (window.cleanFin.features.firefoxWarning === true) {
 /**
  * Jellyfin Enhancement: Firefox warning
- * Shows a warning popup for Firefox users that it unfortunatly doesn't work properly
+ * Shows a dismissible notice for Firefox users that playback may not work properly.
+ *
+ * Language is picked automatically from the UI locale, falling back to English.
+ * Override explicitly if you want to force one:
+ *
+ *   window.cleanFin = {
+ *     features:       { firefoxWarning: true },
+ *     firefoxWarning: { lang: 'de' }
+ *   };
  */
 (function () {
   var COOKIE = 'ff_warn_dismissed';
@@ -31,6 +39,59 @@ if (window.cleanFin.features.firefoxWarning === true) {
   if (!isFirefox) return;
   if (document.cookie.split('; ').indexOf(COOKIE + '=1') !== -1) return;
   if (document.getElementById('ff-warn-overlay')) return;
+
+  var STRINGS = {
+    en: {
+      title: 'Firefox is not recommended',
+      intro: 'You are using <strong>Firefox</strong>. Playback may run into problems:',
+      items: [
+        'HEVC/H.265 is not reliably supported',
+        'Videos may stay black or fail to load',
+        'Some codecs and HDR formats do not work',
+        'Scroll animations are not always smooth',
+        'Videos often stall in the first few seconds — seeking ahead briefly usually fixes it'
+      ],
+      recommend: 'Recommended: <strong>Chrome, Edge, Brave</strong> or ',
+      continue: 'Continue',
+      dismiss: 'Continue and stop showing this'
+    },
+    de: {
+      title: 'Firefox wird nicht empfohlen',
+      intro: 'Du nutzt <strong>Firefox</strong>. Bei der Wiedergabe kann es zu Problemen kommen:',
+      items: [
+        'HEVC/H.265 wird nicht zuverlässig unterstützt',
+        'Videos bleiben eventuell schwarz oder laden nicht',
+        'Einige Codecs und HDR-Formate funktionieren nicht',
+        'Scroll-Animationen laufen nicht immer flüssig',
+        'Videos hängen oft in den ersten Sekunden – kurz vorspulen behebt das meist'
+      ],
+      recommend: 'Empfehlung: <strong>Chrome, Edge, Brave</strong> oder ',
+      continue: 'Fortfahren',
+      dismiss: 'Fortfahren und nicht mehr anzeigen'
+    }
+  };
+
+  function pickLang() {
+    var cfg = window.cleanFin && window.cleanFin.firefoxWarning;
+    if (cfg && cfg.lang && STRINGS[cfg.lang]) return cfg.lang;
+
+    var tags = [];
+    // Jellyfin stores the chosen UI culture on the user's display preferences;
+    // the document/browser locale is a good enough proxy and always present.
+    if (document.documentElement.lang) tags.push(document.documentElement.lang);
+    if (navigator.languages) tags = tags.concat(navigator.languages);
+    if (navigator.language) tags.push(navigator.language);
+
+    for (var i = 0; i < tags.length; i++) {
+      var base = String(tags[i]).toLowerCase().split('-')[0];
+      if (STRINGS[base]) return base;
+    }
+    return 'en';
+  }
+
+  var t = STRINGS[pickLang()];
+
+  var BLINK_URL = 'https://github.com/prayag17/Blink/releases/tag/v1.0.0-alpha04';
 
   var overlay = document.createElement('div');
   overlay.id = 'ff-warn-overlay';
@@ -54,19 +115,15 @@ if (window.cleanFin.features.firefoxWarning === true) {
     '#ff-warn-dismiss:hover{background-color:rgba(255,255,255,0.12)}',
     '</style>',
     '<div id="ff-warn-box" role="dialog" aria-labelledby="ff-warn-title">',
-    '  <h1 id="ff-warn-title">Firefox wird nicht empfohlen</h1>',
-    '  <p>Du nutzt <strong>Firefox</strong>. Bei der Wiedergabe kann es zu Problemen kommen:</p>',
+    '  <h1 id="ff-warn-title">' + t.title + '</h1>',
+    '  <p>' + t.intro + '</p>',
     '  <ul>',
-    '    <li>HEVC/H.265 wird nicht zuverlässig unterstützt</li>',
-    '    <li>Videos bleiben eventuell schwarz oder laden nicht</li>',
-    '    <li>Einige Codecs und HDR-Formate funktionieren nicht</li>',
-    '    <li>Scroll-Animationen laufen nicht immer flüssig</li>',
-    '    <li>Videos hängen oft in den ersten Sekunden – kurz vorspulen behebt das meist</li>',
+    '    <li>' + t.items.join('</li><li>') + '</li>',
     '  </ul>',
-    '  <p>Empfehlung: <strong>Chrome, Edge, Brave</strong> oder <a style="color: unset;" target="_blank" rel="noopener noreferrer" href="https://github.com/prayag17/Blink/releases/tag/v1.0.0-alpha04"><strong>Blink</strong></a>.</p>',
+    '  <p>' + t.recommend + '<a style="color: unset;" target="_blank" rel="noopener noreferrer" href="' + BLINK_URL + '"><strong>Blink</strong></a>.</p>',
     '  <div id="ff-warn-actions">',
-    '    <button id="ff-warn-continue" type="button">Fortfahren</button>',
-    '    <button id="ff-warn-dismiss" type="button">Fortfahren und nicht mehr anzeigen</button>',
+    '    <button id="ff-warn-continue" type="button">' + t.continue + '</button>',
+    '    <button id="ff-warn-dismiss" type="button">' + t.dismiss + '</button>',
     '  </div>',
     '</div>'
   ].join('');
