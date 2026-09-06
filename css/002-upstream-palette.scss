@@ -1,0 +1,44 @@
+/*
+ * Neutral grey palette
+ *
+ * ElegantFin ships a blue/purple palette. The grey scheme CleanFin inherited
+ * used to come from NeutralFin, which is no longer in the import chain.
+ * These are the variables that were verified to actually change rendering —
+ * notation-only differences (rgba vs hsla, quote style, whitespace) and
+ * variables ElegantFin v26.09.05 no longer references (--uiAccentColor,
+ * --activeColor, --activeColorAlpha, --headerBlurLayerVisibility,
+ * --hoverGradientA/B, --backdropPositionY) were deliberately left out.
+ *
+ * Derived from NeutralFin by KartoffelChipss (GNU GPL-2.0).
+ */
+:root {
+    /* Surfaces */
+    --darkerGradientPoint: #131313;
+    --darkerGradientPointAlpha: rgba(17, 17, 17, 0.85);
+    --lighterGradientPoint: #1e1e1e;
+    --lighterGradientPointAlpha: rgba(30, 30, 30, 0.85);
+    --tableBodyColor: rgb(31, 31, 31);
+
+    /* Chrome (header / drawer) */
+    --headerColor: rgba(40, 40, 40, 0.5);
+    --drawerColor: rgba(40, 40, 40, 0.9);
+    --headerColorGradient: linear-gradient(
+        180deg,
+        rgba(40, 40, 40, 0.95) 30%,
+        55%,
+        transparent 90%
+    );
+    --headerColorGradientAlt: linear-gradient(180deg, rgba(40, 40, 40, 0.95), 70%, transparent);
+
+    /* Borders */
+    --borderColor: rgb(71, 71, 71);
+    --darkerBorderColor: rgb(51, 51, 51);
+
+    /* Controls */
+    --selectorBackgroundColor: rgb(60, 60, 60);
+    --selectorBackgroundColorAlpha: rgba(60, 60, 60, 0.5);
+    --btnSubmitColor: rgb(90, 90, 90);
+    --btnSubmitBorderColor: rgb(130, 130, 130);
+    --checkboxCheckedBgColor: rgb(100, 100, 100);
+    --highlightOutlineColor: rgb(110, 110, 110);
+}

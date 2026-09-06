@@ -1,8 +1,10 @@
 # CleanFin
 
-A Jellyfin theme based on [NeutralFin](https://github.com/KartoffelChipss/NeutralFin) by [KartoffelChipss](https://github.com/KartoffelChipss), which is itself based on [ElegantFin](https://github.com/lscambo13/ElegantFin) by [lscambo13](https://github.com/lscambo13). It changes a handful of things in NeutralFin that bothered me and adds an optional script bundle for client-side tweaks.
+A Jellyfin theme built directly on [ElegantFin](https://github.com/lscambo13/ElegantFin) by [lscambo13](https://github.com/lscambo13), with its own neutral grey palette, a set of visual changes, and an optional script bundle for client-side tweaks.
 
-> **About the name:** I originally called it *goodFin*, but renamed it to *CleanFin* — that felt more descriptive of what this fork actually does (and fits the lineage of "*\<adjective\>*Fin" themes).
+> **About the name:** I originally called it *goodFin*, but renamed it to *CleanFin* — that felt more descriptive of what this theme actually does (and fits the lineage of "*\<adjective\>*Fin" themes).
+
+> **History:** CleanFin used to sit on top of [NeutralFin](https://github.com/KartoffelChipss/NeutralFin) by [KartoffelChipss](https://github.com/KartoffelChipss), which was itself a copy of ElegantFin v25.11.25. NeutralFin stopped receiving updates in November 2025, which pinned CleanFin to a nine-month-old ElegantFin. The chain was therefore cut: CleanFin now imports ElegantFin directly, and the parts of NeutralFin that were still doing visible work (the grey palette and the Media Bar fixes) live in `css/002-upstream-palette.scss` and `css/003-upstream-fixes.scss`.
 
 ## Usage
 
@@ -24,7 +26,9 @@ Add the following to your Jellyfin custom CSS:
 <details>
 <summary>For offline use / entire compiled CSS</summary>
 
-The all-in-one build (`style.aio.css` / `style.aio.min.css`) inlines the upstream theme chain (NeutralFin → ElegantFin) at build time, so CleanFin keeps working if either of the upstream CDNs goes down or you're using Jellyfin offline.
+The all-in-one build (`style.aio.css` / `style.aio.min.css`) inlines ElegantFin at build time, so CleanFin keeps working if the upstream CDN goes down or you're using Jellyfin offline. It also embeds the Inter font and drops every Google font reference (see [Fonts](#fonts)).
+
+It is therefore large — roughly 1.1 MB against 11 KB for `style.min.css`, almost entirely the two embedded font files. Use it when you want offline capability or zero third-party requests; otherwise `style.min.css` is the lighter choice.
 
 ```css
 @import url('https://cdn.jsdelivr.net/gh/PalmarHealer/cleanfin@main/style.aio.min.css');
@@ -37,6 +41,28 @@ Unminified:
 ```
 
 </details>
+
+## Fonts
+
+ElegantFin loads Inter from `fonts.googleapis.com`. CleanFin replaces this with
+[Inter v4.1](https://github.com/rsms/inter) by Rasmus Andersson, served from
+this repo (`fonts/`), so no font files are ever fetched from Google.
+
+What that means per build:
+
+| Build | Requests to Google |
+| --- | --- |
+| `style.aio.css` / `style.aio.min.css` | **None.** The upstream `@import` is stripped at build time and Inter is embedded as base64. |
+| `style.css` / `style.min.css` | One CSS request to `fonts.googleapis.com`. No font files are downloaded — our `@font-face` is declared after the upstream import and therefore wins. |
+
+The remaining request in the non-AIO builds is unavoidable while ElegantFin is
+imported over the network: the `@import` sits inside the upstream file, and CSS
+has no way to cancel an `@import`. Use the all-in-one build if you need Google
+contacted not at all.
+
+> **Note:** ElegantFin also loads *Material Symbols Rounded* from
+> `fonts.gstatic.com` for its icon set. Those are left in place — removing them
+> would break the icons. Only Inter is self-hosted so far.
 
 ## Customizer
 
@@ -64,7 +90,7 @@ When the IntroSkipper plugin is active, you can tune how long the skip button st
 
 ## Scripts
 
-In addition to the theme, an optional script bundle adds a few client-side enhancements (inline search, profile dropdown, pause spotlight, Firefox warning, log suppression).
+In addition to the theme, an optional script bundle adds a few client-side enhancements (inline search, profile dropdown, pause spotlight, Quick Connect popup, flat search grid, auto login redirect, Firefox warning, log suppression).
 
 > **Note:** The scripts are designed as additions to the theme. They work standalone, but several modules (inline search, profile dropdown) create elements that CleanFin styles — without the theme they will look unstyled. For the intended look, load both.
 
@@ -79,7 +105,10 @@ window.cleanFin = {
     firefoxWarning:      false,
     inlineSearch:        false,
     inlineProfile:       false,
-    pauseSpotlight:      false
+    pauseSpotlight:      false,
+    quickConnectPopup:   false,
+    searchGrid:          false,
+    autoRedirect:        false
   }
 };
 (function () {
@@ -88,6 +117,35 @@ window.cleanFin = {
   document.head.appendChild(s);
 })();
 ```
+
+### Modules
+
+| Flag | What it does |
+| --- | --- |
+| `suppressBrowserLogs` | Silences `console.log/warn/error/info/debug`. |
+| `firefoxWarning` | One-time dismissible notice that Firefox has playback issues. Styled with the theme's own variables. |
+| `inlineSearch` | Netflix-style expanding search box in the navbar. |
+| `inlineProfile` | Quick-action profile dropdown in the header. |
+| `pauseSpotlight` | Cinematic overlay with logo/metadata when playback is paused and idle for 10s. |
+| `quickConnectPopup` | Turns the profile dropdown's "Quick Connect" entry into an in-page modal. Independent of `inlineProfile`. |
+| `searchGrid` | Replaces the search page's per-type sliders with one relevance-sorted grid. |
+| `autoRedirect` | Skips the native login page. **Needs configuration — see below.** |
+
+#### Configuring `autoRedirect`
+
+On desktop this module redirects the login page to an SSO start URL, which is
+specific to your server, so you have to supply it. In the Jellyfin Android app it
+instead auto-triggers Quick Connect, which needs no URL.
+
+```js
+window.cleanFin = {
+  features:     { autoRedirect: true },
+  autoRedirect: { ssoUrl: 'https://jellyfin.example.com/sso/OID/start/<provider>' }
+};
+```
+
+Without `ssoUrl` the desktop redirect stays disabled and the login page is left
+untouched, so enabling the flag alone cannot lock you out.
 
 <details>
 <summary>Alternative: load via plain HTML <code>&lt;script&gt;</code> tags</summary>
@@ -102,7 +160,10 @@ If you can't use the injector plugin and are editing `index.html` (or another HT
       firefoxWarning:      false,
       inlineSearch:        false,
       inlineProfile:       false,
-      pauseSpotlight:      false
+      pauseSpotlight:      false,
+      quickConnectPopup:   false,
+      searchGrid:          false,
+      autoRedirect:        false
     }
   };
 </script>
@@ -127,18 +188,35 @@ These plugins pair well with the theme. None are required, but several of the SC
 
 ## Structure
 
-- `css/` — Each CSS change lives in its own `.scss` file. Files are prefixed with a number so they concatenate in a defined order (`000-imports.scss` and `001-root.scss` come first).
+- `css/` — Each CSS change lives in its own `.scss` file. Files are prefixed with a number so they concatenate in a defined order. `000-imports.scss` (upstream import), `001-root.scss` (CleanFin variables), `002-upstream-palette.scss` and `003-upstream-fixes.scss` (code derived from NeutralFin) come first; CleanFin's own rules start at `010-`.
 - `js/` — Each script lives in its own `.js` file, similarly prefixed for ordering. The bundler derives the feature flag name from the filename (e.g. `010-firefox-warning.js` → `firefoxWarning`).
+- `fonts/` — Self-hosted Inter (SIL Open Font License 1.1, see `fonts/LICENSE.txt`).
+- `scripts/` — Build helpers. `aio-fonts.js` strips Google's Inter `@font-face` blocks from the all-in-one CSS and inlines our own as base64.
 - `style.css` / `style.min.css` / `style.aio.css` / `style.aio.min.css` / `script.js` / `script.min.js` — Built artifacts in the repo root. **Do not edit these by hand** — they are regenerated by the build action.
 
 ## Build
 
 A GitHub Action (`.github/workflows/build.yml`) builds both CSS and JS:
 
-- **CSS** — concatenates `css/*.scss` in sorted order and compiles with Dart Sass into `style.css` (expanded) and `style.min.css` (compressed). PostCSS then inlines remote `@import` URLs to produce the offline-safe `style.aio.css` / `style.aio.min.css`.
+- **CSS** — concatenates `css/*.scss` in sorted order and compiles with Dart Sass into `style.css` (expanded) and `style.min.css` (compressed). PostCSS then inlines remote `@import` URLs, `scripts/aio-fonts.js` swaps the Google Inter faces for embedded base64, and esbuild minifies, producing the offline-safe `style.aio.css` / `style.aio.min.css`.
 - **JS** — concatenates `js/*.js` in sorted order, wraps each module in a `window.cleanFin.features.<key>` toggle, and produces `script.js` (readable) and `script.min.js` (minified via esbuild).
 
 The action runs on every push that touches `css/**` or `js/**` and commits the rebuilt files back to `main`.
+
+### Updating ElegantFin
+
+The upstream import in `css/000-imports.scss` is pinned to an explicit tag on
+purpose. **Do not change it to `@latest`:** jsDelivr resolves
+`ElegantFin@latest` to v25.12.31, because tags such as `v26.09.05` contain
+leading zeros and are therefore not valid semver, so jsDelivr skips them —
+`@latest` would silently pin you to an older release than the pin does.
+
+To bump, change the tag *and* the filename together (the
+`build-latest-minified` file is versioned per tag, not globally latest), then
+check the [ElegantFin releases](https://github.com/lscambo13/ElegantFin/releases)
+for renamed or dropped variables — v26.09.05, for example, removed
+`--uiAccentColor` and `--activeColor` and switched the icon font from
+`Material Icons Round` to `Material Symbols Rounded`.
 
 To build locally:
 
@@ -149,10 +227,17 @@ cat css/*.scss > _bundle.scss
 sass --style=expanded _bundle.scss style.css
 sass --style=compressed _bundle.scss style.min.css
 npx postcss style.css --use postcss-import-url -o style.aio.css --no-map
+node scripts/aio-fonts.js style.aio.css
 esbuild style.aio.css --minify --outfile=style.aio.min.css
 # JS bundle: replicate the loop in .github/workflows/build.yml
 ```
 
 ## Credit & License
 
-This theme builds on [NeutralFin](https://github.com/KartoffelChipss/NeutralFin) by KartoffelChipss, which builds on [ElegantFin](https://github.com/lscambo13/ElegantFin) by lscambo13. Distributed under the same license as the upstream projects (GNU GPL v2). See [LICENSE](LICENSE).
+This theme builds on [ElegantFin](https://github.com/lscambo13/ElegantFin) by lscambo13.
+
+It also carries code derived from [NeutralFin](https://github.com/KartoffelChipss/NeutralFin) by KartoffelChipss — the grey palette in `css/002-upstream-palette.scss` and the Media Bar fixes in `css/003-upstream-fixes.scss` — even though NeutralFin is no longer part of the import chain.
+
+The bundled [Inter](https://github.com/rsms/inter) typeface by Rasmus Andersson is used under the SIL Open Font License 1.1 — see [fonts/LICENSE.txt](fonts/LICENSE.txt).
+
+The theme itself is distributed under the same license as the upstream projects (GNU GPL v2). See [LICENSE](LICENSE).

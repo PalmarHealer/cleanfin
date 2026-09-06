@@ -1,2 +1,14 @@
 /* Imports */
-@import url('https://cdn.jsdelivr.net/gh/KartoffelChipss/NeutralFin@latest/theme/neutralfin-minified.css');
+
+/*
+ * Upstream: ElegantFin by lscambo13 — https://github.com/lscambo13/ElegantFin
+ *
+ * Pinned to an explicit tag on purpose. Do NOT switch this to @latest:
+ * jsDelivr resolves `ElegantFin@latest` to v25.12.31, because tags like
+ * v26.09.05 contain leading zeros and are therefore not valid semver, so
+ * jsDelivr skips them. @latest would silently pin you to an older release.
+ *
+ * To adopt a newer upstream, bump the tag AND the filename together — the
+ * "build-latest-minified" file is versioned per tag, not globally latest.
+ */
+@import url('https://cdn.jsdelivr.net/gh/lscambo13/ElegantFin@v26.09.05/Theme/ElegantFin-jellyfin-theme-build-latest-minified.css');

@@ -1,0 +1,37 @@
+/*
+ * Inter, self-hosted
+ *
+ * ElegantFin pulls Inter from fonts.googleapis.com. These declarations use the
+ * variable font from https://github.com/rsms/inter (v4.1, SIL Open Font
+ * License 1.1 — see fonts/LICENSE.txt) served from this repo instead.
+ *
+ * This file must sort AFTER 000-imports.scss: both declare the family "Inter",
+ * and the later declaration is the one the browser uses, so no font files are
+ * ever fetched from fonts.gstatic.com.
+ *
+ * The upstream @import to fonts.googleapis.com still issues one CSS request in
+ * style.css / style.min.css, because it lives inside the imported upstream file
+ * and CSS cannot cancel an @import. The all-in-one build strips it, so
+ * style.aio.css / style.aio.min.css contact Google not at all and additionally
+ * carry the font inline as base64 (see .github/workflows/build.yml).
+ */
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url('https://cdn.jsdelivr.net/gh/PalmarHealer/cleanfin@main/fonts/InterVariable.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Inter';
+    font-style: italic;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url('https://cdn.jsdelivr.net/gh/PalmarHealer/cleanfin@main/fonts/InterVariable-Italic.woff2') format('woff2');
+}
+
+:root {
+    /* Inter ships an optical-size axis; let the browser drive it */
+    font-optical-sizing: auto;
+}

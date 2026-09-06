@@ -134,8 +134,9 @@
 
     async function fetchNowPlaying() {
         try {
-            const sessions = await ApiClient.getSessions({ ControllableByUserId: ApiClient.getCurrentUserId() });
-            return sessions.find((x) => x.NowPlayingItem)?.NowPlayingItem || null;
+            const myDeviceId = ApiClient.deviceId();
+            const sessions = await ApiClient.getSessions();
+            return sessions.find((x) => x.DeviceId === myDeviceId && x.NowPlayingItem)?.NowPlayingItem || null;
         } catch {
             return null;
         }

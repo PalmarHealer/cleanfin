@@ -1,6 +1,8 @@
 /* Root styles */
 :root {
     --cleanfin: 1; /* sentinel — lets scripts check that the theme is loaded */
+    /* Footer lineage — previously supplied by NeutralFin, now owned by CleanFin */
+    --elegantFinFooterText: 'CleanFin based on ElegantFin v26.09.05';
     --primary-r: 229;
     --primary-g: 56;
     --primary-b: 59;

@@ -1,0 +1,51 @@
+/*
+ * Media Bar plugin fixes
+ *
+ * Previously inherited from NeutralFin, which is no longer in the import
+ * chain. Each rule below was verified against a live Jellyfin instance to
+ * still take effect on top of ElegantFin v26.09.05.
+ *
+ * Derived from NeutralFin by KartoffelChipss (GNU GPL-2.0).
+ */
+
+/*
+ * Container spans the app bar area.
+ *
+ * NeutralFin also set `margin-top: calc(var(--appBarHeight) * -1)` here.
+ * That must NOT be carried over: ElegantFin v26.09.05 performs the app-bar
+ * offset itself, so the extra margin double-shifts the media bar (verified
+ * against a live instance: it moved the container up by a further 74.4px).
+ * Only the height compensation is still needed.
+ */
+#slides-container {
+    height: calc(100% + var(--appBarHeight));
+}
+
+/* Keep the media bar buttons visually consistent with each other */
+.detailButton.detail-button,
+.detailButton.detail-button:not(.btnPlay) {
+    margin: 0 !important;
+    background: buttonface !important;
+    color: inherit !important;
+}
+
+.btnPlay.detailButton.play-button {
+    margin-right: 0 !important;
+}
+
+.favorite-button {
+    margin: 0 !important;
+    background: buttonface !important;
+    color: inherit !important;
+}
+
+.favorite-button.favorited {
+    color: red;
+}
+
+/* Age rating tag inherited the wrong color */
+.age-rating {
+    color: inherit !important;
+    border-color: inherit !important;
+    margin-bottom: -3px !important;
+}

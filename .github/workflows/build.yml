@@ -45,6 +45,7 @@ jobs:
       - name: Build all-in-one CSS (inline remote @imports)
         run: |
           npx postcss style.css --use postcss-import-url -o style.aio.css --no-map
+          node scripts/aio-fonts.js style.aio.css
           esbuild style.aio.css --minify --outfile=style.aio.min.css
 
       # ---------- JS ----------
