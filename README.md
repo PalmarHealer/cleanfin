@@ -123,13 +123,25 @@ window.cleanFin = {
 | Flag | What it does |
 | --- | --- |
 | `suppressBrowserLogs` | Silences `console.log/warn/error/info/debug`. |
-| `firefoxWarning` | One-time dismissible notice that Firefox has playback issues. Styled with the theme's own variables. |
+| `firefoxWarning` | One-time dismissible notice that Firefox has playback issues. Styled with the theme's own variables. English by default, German when the UI locale is German. |
 | `inlineSearch` | Netflix-style expanding search box in the navbar. |
 | `inlineProfile` | Quick-action profile dropdown in the header. |
 | `pauseSpotlight` | Cinematic overlay with logo/metadata when playback is paused and idle for 10s. |
 | `quickConnectPopup` | Turns the profile dropdown's "Quick Connect" entry into an in-page modal. Independent of `inlineProfile`. |
 | `searchGrid` | Replaces the search page's per-type sliders with one relevance-sorted grid. |
 | `autoRedirect` | Skips the native login page. **Needs configuration — see below.** |
+
+#### Language of `firefoxWarning`
+
+The notice ships English and German strings and picks one from the UI locale,
+falling back to English. To force a language:
+
+```js
+window.cleanFin = {
+  features:       { firefoxWarning: true },
+  firefoxWarning: { lang: 'de' }
+};
+```
 
 #### Configuring `autoRedirect`
 
