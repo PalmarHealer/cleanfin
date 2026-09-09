@@ -297,15 +297,21 @@
 
     /* ---------- applying it to the page ---------- */
 
+    var LABEL_FOR = {
+        Video:    videoLabel,
+        Audio:    audioLabel,
+        Subtitle: subtitleLabel
+    };
+
     var KIND = [
-        { cls: 'selectVideo',     type: 'Video',    label: videoLabel },
-        { cls: 'selectAudio',     type: 'Audio',    label: audioLabel },
-        { cls: 'selectSubtitles', type: 'Subtitle', label: subtitleLabel }
+        { cls: 'selectVideo',     type: 'Video' },
+        { cls: 'selectAudio',     type: 'Audio' },
+        { cls: 'selectSubtitles', type: 'Subtitle' }
     ];
 
-    function streamMap(source) {
+    function streamMap(streams) {
         var map = {};
-        (source.MediaStreams || []).forEach(function (s) { map[s.Index] = s; });
+        (streams || []).forEach(function (s) { map[s.Index] = s; });
         return map;
     }
 
@@ -317,7 +323,7 @@
             var stream = map[parseInt(opt.value, 10)];
             if (!stream || stream.Type !== kind.type) return;   // e.g. the "Aus" entry
 
-            var label = kind.label(stream);
+            var label = LABEL_FOR[kind.type](stream);
             if (opt.textContent !== label) opt.textContent = label;
 
             // Collapse tracks that end up identical (KPop Demon Hunters ships 53
@@ -332,7 +338,7 @@
 
     function decorate(page, item) {
         (item.MediaSources || []).forEach(function (source) {
-            var map = streamMap(source);
+            var map = streamMap(source.MediaStreams);
             KIND.forEach(function (kind) {
                 Array.prototype.forEach.call(page.querySelectorAll('select.' + kind.cls), function (select) {
                     if (select.dataset.cfSpecs === source.Id) return;
@@ -374,8 +380,129 @@
         }, function () { lastRun = ''; });
     }
 
+    /* ---------- applying it in the video player ---------- */
+
+    // The player's Audio / Untertitel menus are actionsheets whose entries carry
+    // the stream index in data-id, so the same labels apply. Only sheets opened
+    // from those two buttons are touched, never every actionsheet: the playback
+    // speed menu uses bare integers as data-id too ("1", "2", "3", "4"), and a
+    // structural guess would happily rename "2x" into an audio track.
+
+    var ARM_MS     = 3000;      // how long a track button's click keeps watching
+    var MAP_TTL_MS = 5000;      // refetch window, so a new episode is picked up
+
+    var osdMap = null;          // { map: <index -> stream>, at: <ms> }
+    var osdFetching = false;
+
+    // NowPlayingItem carries MediaStreams for the source actually playing, so
+    // this is one request rather than a session lookup plus an item lookup.
+    function refreshOsdMap() {
+        var api = window.ApiClient;
+        if (osdFetching || !api || !api.deviceId || !api.getJSON) return;
+
+        osdFetching = true;
+        api.getJSON(api.getUrl('Sessions', { DeviceId: api.deviceId() })).then(function (sessions) {
+            osdFetching = false;
+            for (var i = 0; i < (sessions || []).length; i++) {
+                var playing = sessions[i].NowPlayingItem;
+                if (playing && playing.MediaStreams) {
+                    osdMap = { map: streamMap(playing.MediaStreams), at: Date.now() };
+                    return;
+                }
+            }
+        }, function () { osdFetching = false; });
+    }
+
+    function isChecked(item) {
+        var icon = item.querySelector('.actionsheetMenuItemIcon');
+        return !!icon && icon.style.visibility !== 'hidden';
+    }
+
+    function applyToSheet(sheet, type, map) {
+        var seen = {};
+        var drop = [];
+
+        Array.prototype.forEach.call(sheet.querySelectorAll('.actionSheetMenuItem'), function (item) {
+            var id = item.getAttribute('data-id');
+            if (!/^\d+$/.test(id)) return;              // "Aus" (-1), "secondarysubtitle"
+
+            var stream = map[parseInt(id, 10)];
+            if (!stream || stream.Type !== type) return;
+
+            var text = item.querySelector('.actionSheetItemText');
+            if (!text) return;
+
+            var label = LABEL_FOR[type](stream);
+            if (text.textContent !== label) text.textContent = label;
+
+            if (seen[label] && !isChecked(item)) drop.push(item);
+            else seen[label] = true;
+        });
+
+        drop.forEach(function (i) { i.remove(); });
+    }
+
+    function decorateSheet(sheet, type) {
+        if (!osdMap) return false;                   // session lookup still in flight
+        applyToSheet(sheet, type, osdMap.map);
+        return true;
+    }
+
+    // Sheets are appended into a .dialogContainer rather than straight onto the
+    // body, so the subtree has to be watched — but only while a click is armed,
+    // instead of keeping an observer on the whole document for the session.
+    function watchForSheet(type) {
+        var done = false;
+        var observer = new MutationObserver(function (records) {
+            records.forEach(function (record) {
+                Array.prototype.forEach.call(record.addedNodes, function (node) {
+                    if (done || node.nodeType !== 1) return;
+
+                    var sheet = node.classList.contains('actionSheet')
+                        ? node
+                        : node.querySelector && node.querySelector('.actionSheet');
+                    if (!sheet) return;
+
+                    if (decorateSheet(sheet, type)) {
+                        done = true;
+                        observer.disconnect();
+                        return;
+                    }
+
+                    // The map has not landed yet; keep trying while it is armed.
+                    var retry = setInterval(function () {
+                        if (done || !document.contains(sheet)) { clearInterval(retry); return; }
+                        if (decorateSheet(sheet, type)) { done = true; clearInterval(retry); }
+                    }, 50);
+                    setTimeout(function () { clearInterval(retry); }, ARM_MS);
+                });
+            });
+        });
+
+        observer.observe(document.body, { childList: true, subtree: true });
+        setTimeout(function () { observer.disconnect(); }, ARM_MS);
+    }
+
+    document.addEventListener('click', function (e) {
+        var target = e.target;
+        if (!target || !target.closest) return;
+
+        var btn = target.closest('.btnSubtitles, .btnAudio');
+        if (!btn) return;
+
+        if (!osdMap || Date.now() - osdMap.at > MAP_TTL_MS) refreshOsdMap();
+        watchForSheet(btn.classList.contains('btnAudio') ? 'Audio' : 'Subtitle');
+    }, true);
+
     // Jellyfin rebuilds the selects asynchronously and reuses detail pages, so
     // poll rather than trying to catch a single render event.
-    setInterval(run, 300);
+    setInterval(function () {
+        run();
+
+        // Keep the player's stream map warm, so opening a track menu relabels it
+        // in the same frame instead of flashing the raw Jellyfin text first.
+        if (!document.querySelector('video')) osdMap = null;
+        else if (!osdMap || Date.now() - osdMap.at > MAP_TTL_MS) refreshOsdMap();
+    }, 300);
     window.addEventListener('hashchange', function () { lastRun = ''; });
 })();

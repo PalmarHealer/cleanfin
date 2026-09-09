@@ -134,7 +134,7 @@ window.cleanFin = {
 | `searchGrid` | Replaces the search page's per-type sliders with one relevance-sorted grid. |
 | `autoRedirect` | Skips the native login page. **Needs configuration — see below.** |
 | `overviewExpander` | Animates the description "show more" toggle and stops the text from jumping when it opens. |
-| `mediaSpecs` | Rewrites the Video / Audio / Subtitle dropdowns into one readable form and collapses duplicate tracks. |
+| `mediaSpecs` | Rewrites the Video / Audio / Subtitle dropdowns into one readable form and collapses duplicate tracks. Applies on detail pages and in the video player's Audio / Subtitle menus. |
 | `backdropGuard` | Hides the Media Bar plugin's slideshow backdrop outside the home screen, so a slow page change shows nothing rather than the previous slide's artwork. |
 
 #### What `mediaSpecs` shows
@@ -165,6 +165,12 @@ Notes on the choices:
 - **Duplicate tracks are collapsed.** One test title ships 53 subtitle
   streams that reduce to 28 distinct entries; the selected track is never
   removed.
+
+The player's own Audio and Untertitel menus are relabelled too. Only the sheets
+opened from those two buttons are touched: the playback-speed menu numbers its
+entries `1`, `2`, `3`, `4` in the same `data-id` attribute that carries the
+stream index, so a sheet matched by shape alone would rename `2x` into an audio
+track.
 
 #### Language of `firefoxWarning`
 
