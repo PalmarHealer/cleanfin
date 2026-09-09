@@ -835,6 +835,14 @@ ul.MuiList-root.MuiMenu-list.MuiList-dense>div:first-child{gap:.5rem}
   display: none;
 }
 
+/* The check/favourite/menu cluster in the card corner. Desktop only: in
+ * layout-mobile and layout-tv, .cardOverlayButton-br IS the play button
+ * (a <button data-action="play">), and there is no .cardOverlayFab-primary
+ * to fall back on — hiding it there leaves cards with no way to play. */
+.layout-desktop .cardOverlayButton-br {
+  display: none;
+}
+
 .osdTimeText {
   visibility: hidden;
   opacity: 0;
@@ -1290,4 +1298,23 @@ input[data-id=txtOrderIndex] {
 .backdropCard.card-hoverable:active .cardOverlayContainer::after,
 .overflowBackdropCard.card-hoverable:active .cardOverlayContainer::after {
   transform: translateY(0) translateX(100%);
+}
+
+/* === 370-tab-hover.scss === */
+/* Tab hover color */
+/* Jellyfin turns an inactive tab accent-blue on hover; keep it in the palette. */
+.sectionTabs .emby-tab-button:not(.emby-tab-button-active):hover {
+  color: var(--textColor);
+}
+
+/* === 380-icon-button-hover.scss === */
+/* Icon button hover */
+/* Upstream fills these buttons with --hoverBackgroundColor on hover, which is
+ * the light text color and therefore reads as a bright blob. Use a faint tint
+ * instead and drop the text shadow that came with it. */
+.layout-desktop .detailButton:not(.btnPlay):hover,
+.paper-icon-button-light:hover:not(:disabled) {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--textColor);
+  text-shadow: none !important;
 }
