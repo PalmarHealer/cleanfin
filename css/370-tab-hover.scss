@@ -1,0 +1,6 @@
+/* Tab hover color */
+
+/* Jellyfin turns an inactive tab accent-blue on hover; keep it in the palette. */
+.sectionTabs .emby-tab-button:not(.emby-tab-button-active):hover {
+  color: var(--textColor);
+}

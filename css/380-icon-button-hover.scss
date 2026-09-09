@@ -1,0 +1,11 @@
+/* Icon button hover */
+
+/* Upstream fills these buttons with --hoverBackgroundColor on hover, which is
+ * the light text color and therefore reads as a bright blob. Use a faint tint
+ * instead and drop the text shadow that came with it. */
+.layout-desktop .detailButton:not(.btnPlay):hover,
+.paper-icon-button-light:hover:not(:disabled) {
+  background-color: rgba(255, 255, 255, .05);
+  color: var(--textColor);
+  text-shadow: none !important;
+}

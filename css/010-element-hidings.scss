@@ -18,6 +18,14 @@
   display: none;
 }
 
+/* The check/favourite/menu cluster in the card corner. Desktop only: in
+ * layout-mobile and layout-tv, .cardOverlayButton-br IS the play button
+ * (a <button data-action="play">), and there is no .cardOverlayFab-primary
+ * to fall back on — hiding it there leaves cards with no way to play. */
+.layout-desktop .cardOverlayButton-br {
+  display: none;
+}
+
 .osdTimeText {
   visibility: hidden;
   opacity: 0;
